@@ -1,0 +1,15 @@
+.home {
+    text-align: center;
+    padding: 20px;
+  }
+  .banner img {
+    width: 100%;
+  }
+  .order-button {
+    background-color: #fdc913;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  

@@ -1,0 +1,13 @@
+.success {
+    text-align: center;
+    padding: 50px;
+  }
+  .home-button {
+    margin-top: 20px;
+    background-color: #fdc913;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
