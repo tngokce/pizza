@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import OrderForm from "./pages/OrderForm";
 import Success from "./pages/Success";
@@ -9,28 +7,27 @@ import "./App.css";
 
 function App() {
   const [orderData, setOrderData] = useState(null);
+  const [apiResponse, setApiResponse] = useState(null);
 
-  const handleOrderSubmit = (data) => {
-    setOrderData(data);
+  const handleOrderSubmit = (formData, response) => {
+    setOrderData(formData);
+    setApiResponse(response);
   };
 
   return (
-    <Router>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route 
-            path="/order" 
-            element={<OrderForm onOrderSubmit={handleOrderSubmit} />} 
-          />
-          <Route 
-            path="/success" 
-            element={<Success orderData={orderData} />} 
-          />
-        </Routes>
-      </div>
-    </Router>
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route 
+          path="/order" 
+          element={<OrderForm onOrderSubmit={handleOrderSubmit} />} 
+        />
+        <Route 
+          path="/success" 
+          element={<Success orderData={orderData} apiResponse={apiResponse} />} 
+        />
+      </Routes>
+    </div>
   );
 }
 
