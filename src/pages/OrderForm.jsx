@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import axios from "axios";
 import "../styles/OrderForm.css";
 
-function OrderForm() {
+function OrderForm({ onOrderSubmit }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     size: "",
-    crust: "",
     toppings: [],
     note: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -25,74 +28,120 @@ function OrderForm() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("https://reqres.in/api/pizza", formData)
-      .then((response) => {
-        console.log("Order Response:", response.data);
-        window.location.href = "/success";
-      })
-      .catch((error) => console.error("Error:", error));
+    setLoading(true);
+
+    try {
+      const response = await axios.post("https://reqres.in/api/pizza", formData);
+      onOrderSubmit(response.data);
+      toast.success('Siparişiniz başarıyla alındı!');
+      navigate("/success");
+    } catch (error) {
+      toast.error('Sipariş gönderilirken bir hata oluştu: ' + 
+        (error.response?.data?.message || 'İnternet bağlantınızı kontrol edin'));
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const isFormValid = formData.name.length >= 3 && 
+                     formData.size && 
+                     formData.toppings.length >= 4 && 
+                     formData.toppings.length <= 10;
 
   return (
     <div className="order-form">
       <h1>Pizza Siparişi</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          İsim:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            minLength={3}
-            required
-          />
-        </label>
-        <label>
-          Boyut:
-          <select name="size" value={formData.size} onChange={handleChange} required>
-            <option value="">Seçiniz</option>
-            <option value="small">Küçük</option>
-            <option value="medium">Orta</option>
-            <option value="large">Büyük</option>
-          </select>
-        </label>
-        <label>
-          Hamur:
-          <select name="crust" value={formData.crust} onChange={handleChange} required>
-            <option value="">Seçiniz</option>
-            <option value="thin">İnce</option>
-            <option value="thick">Kalın</option>
-          </select>
-        </label>
-        <div className="toppings">
-          <h3>Malzemeler:</h3>
-          {["Pepperoni", "Mantar", "Soğan", "Sucuk"].map((topping, index) => (
-            <label key={index}>
+      
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>
+              İsim:
               <input
-                type="checkbox"
-                name="toppings"
-                value={topping}
+                type="text"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
+                minLength={3}
+                required
+                className="custom-input"
               />
-              {topping}
             </label>
-          ))}
-        </div>
-        <label>
-          Not:
-          <textarea
-            name="note"
-            value={formData.note}
-            onChange={handleChange}
-            placeholder="Siparişe eklemek istediğiniz bir not var mı?"
-          />
-        </label>
-        <button type="submit">Sipariş Ver</button>
-      </form>
+          </div>
+
+          <div className="form-group">
+            <label>
+              Boyut:
+              <div className="radio-group">
+                {["Küçük", "Orta", "Büyük"].map((size) => (
+                  <label key={size} className="radio-label">
+                    <input
+                      type="radio"
+                      name="size"
+                      value={size}
+                      checked={formData.size === size}
+                      onChange={handleChange}
+                    />
+                    <span className="custom-radio"></span>
+                    {size}
+                  </label>
+                ))}
+              </div>
+            </label>
+          </div>
+
+          <div className="form-group">
+            <h3>Malzemeler: (En az 4, en fazla 10 seçim yapın)</h3>
+            <div className="toppings-grid">
+              {["Pepperoni", "Mantar", "Soğan", "Sucuk", "Zeytin", "Biber", 
+                "Mısır", "Domates", "Salam", "Mozarella"].map((topping) => (
+                <label key={topping} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="toppings"
+                    value={topping}
+                    checked={formData.toppings.includes(topping)}
+                    onChange={handleChange}
+                  />
+                  <span className="custom-checkbox"></span>
+                  {topping}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>
+              Not:
+              <textarea
+                name="note"
+                value={formData.note}
+                onChange={handleChange}
+                placeholder="Siparişiniz için ekstra notunuz var mı?"
+                className="custom-textarea"
+              />
+            </label>
+          </div>
+
+          <div className="order-summary">
+            <h3>Sipariş Özeti</h3>
+            <p>İsim: {formData.name}</p>
+            <p>Boyut: {formData.size}</p>
+            <p>Seçilen Malzemeler: {formData.toppings.join(", ")}</p>
+            {formData.note && <p>Not: {formData.note}</p>}
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={!isFormValid || loading}
+            className="submit-button"
+          >
+            {loading ? "Sipariş Gönderiliyor..." : "Sipariş Ver"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

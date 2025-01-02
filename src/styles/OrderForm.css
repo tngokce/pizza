@@ -23,4 +23,117 @@
     border-radius: 5px;
     cursor: pointer;
   }
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  /* Özel Input Stilleri */
+  .custom-input, .custom-textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--color-light-gray);
+    border-radius: 4px;
+    font-family: 'Barlow', sans-serif;
+    transition: border-color 0.3s;
+  }
+  .custom-input:focus, .custom-textarea:focus {
+    border-color: var(--color-yellow);
+    outline: none;
+  }
+  /* Özel Radio Button Stili */
+  .radio-group {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .radio-label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .radio-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .custom-radio {
+    position: absolute;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #fff;
+    border: 2px solid var(--color-yellow);
+    border-radius: 50%;
+  }
+  .radio-label input:checked ~ .custom-radio {
+    background-color: var(--color-yellow);
+  }
+  /* Özel Checkbox Stili */
+  .checkbox-label {
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .checkbox-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .custom-checkbox {
+    position: absolute;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #fff;
+    border: 2px solid var(--color-yellow);
+    border-radius: 4px;
+  }
+  .checkbox-label input:checked ~ .custom-checkbox {
+    background-color: var(--color-yellow);
+  }
+  .custom-checkbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+  .checkbox-label input:checked ~ .custom-checkbox:after {
+    display: block;
+  }
+  .toppings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .order-summary {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .submit-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--color-yellow);
+    color: var(--color-dark-gray);
+    border: none;
+    border-radius: 4px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   
