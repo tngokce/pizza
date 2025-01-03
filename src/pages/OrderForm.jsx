@@ -31,10 +31,12 @@ function OrderForm({ onOrderSubmit }) {
     size: "",
     toppings: [],
     note: "",
+    dough: "",
+    quantity: 1
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
-    name: '',
+    name: "",
     toppings: '',
     size: ''
   });
@@ -118,7 +120,7 @@ function OrderForm({ onOrderSubmit }) {
     setLoading(true);
 
     try {
-      const response = await api.post("https://reqres.in/api/pizza", formData);
+      const response = await axios.post("https://reqres.in/api/pizza", formData);
       
       // konsola yazdir
       console.log('API Yanıtı:', response.data);
@@ -134,8 +136,10 @@ function OrderForm({ onOrderSubmit }) {
       navigate("/success");
     } catch (error) {
       console.error('API Hatası:', error);
-      toast.error('Sipariş gönderilirken bir hata oluştu: ' + 
-        (error.response?.data?.message || 'İnternet bağlantınızı kontrol edin'));
+      toast.error(
+        error.response?.data?.message || 
+        'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.'
+      );
     } finally {
       setLoading(false);
     }
@@ -165,7 +169,23 @@ function OrderForm({ onOrderSubmit }) {
   };
 
   const calculateTotalPrice = () => {
-    return calculateBasePrice() + calculateToppingsPrice();
+    return (calculateBasePrice() + calculateToppingsPrice()) * formData.quantity;
+  };
+
+  const increaseQuantity = () => {
+    setFormData(prev => ({
+      ...prev,
+      quantity: prev.quantity + 1
+    }));
+  };
+
+  const decreaseQuantity = () => {
+    if (formData.quantity > 1) {
+      setFormData(prev => ({
+        ...prev,
+        quantity: prev.quantity - 1
+      }));
+    }
   };
 
   return (
@@ -180,7 +200,7 @@ function OrderForm({ onOrderSubmit }) {
       <div className="form-container">
         <h2>Pizza Siparişi</h2>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
+        <div className="form-group">
             <label htmlFor="name">
               İsim:
               <input
@@ -198,26 +218,46 @@ function OrderForm({ onOrderSubmit }) {
             </label>
           </div>
 
-          <div className="form-group">
-            <label>
-              Boyut:
-              <div className="radio-group">
-                {["Küçük", "Orta", "Büyük"].map((size) => (
-                  <label key={size} className="radio-label">
-                    <input
-                      type="radio"
-                      name="size"
-                      value={size}
-                      checked={formData.size === size}
-                      onChange={handleChange}
-                    />
-                    <span className="custom-radio"></span>
-                    {size}
-                  </label>
-                ))}
-              </div>
-              {errors.size && <span className="error-message">{errors.size}</span>}
-            </label>
+          <div className="size-dough-container">
+            <div className="form-group size-group">
+              <label>
+                Boyut:
+                <div className="radio-group-vertical">
+                  {["Küçük", "Orta", "Büyük"].map((size) => (
+                    <label key={size} className="radio-label">
+                      <input
+                        type="radio"
+                        name="size"
+                        value={size}
+                        checked={formData.size === size}
+                        onChange={handleChange}
+                      />
+                      <span className="custom-radio"></span>
+                      {size}
+                    </label>
+                  ))}
+                </div>
+                {errors.size && <span className="error-message">{errors.size}</span>}
+              </label>
+            </div>
+
+            <div className="form-group dough-group">
+              <label htmlFor="dough">
+                Hamur Seç:
+                <select
+                  id="dough"
+                  name="dough"
+                  value={formData.dough}
+                  onChange={handleChange}
+                  className="custom-select"
+                >
+                  <option value="">Hamur kalınlığı seçin</option>
+                  <option value="İnce">İnce Hamur</option>
+                  <option value="Normal">Normal Hamur</option>
+                  <option value="Kalın">Kalın Hamur</option>
+                </select>
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
@@ -244,13 +284,13 @@ function OrderForm({ onOrderSubmit }) {
 
           <div className="form-group">
             <label htmlFor="note">
-              Özel Notlar:
+              Sipariş Notu:
               <textarea
                 id="note"
                 name="note"
                 value={formData.note}
                 onChange={handleChange}
-                placeholder="Siparişiniz için ekstra notunuz var mı? (Ör: Az pişmiş, ekstra sos, vb.)"
+                placeholder="Siparişiniz için notunuz var mı? (Ör: Az pişmiş, ekstra sos, vb.)"
                 className="custom-textarea"
                 maxLength={200}
               />
@@ -260,49 +300,79 @@ function OrderForm({ onOrderSubmit }) {
             </label>
           </div>
 
-          <div className="order-summary">
-            <h3>Sipariş Özeti</h3>
-            <p>
-              <span className="label">İsim:</span>
-              <span>{formData.name || '-'}</span>
-            </p>
-            <p>
-              <span className="label">Pizza Boyutu:</span>
-              <span>{formData.size || '-'}</span>
-            </p>
-            <p>
-              <span className="label">Malzemeler:</span>
-              <div className="toppings-list">
-                {formData.toppings.length > 0 ? (
-                  formData.toppings.map(topping => (
-                    <span key={topping} className="topping-tag">
-                      {topping}
-                    </span>
-                  ))
-                ) : (
-                  '-'
-                )}
+          <div className="quantity-summary-container">
+            <div className="form-group quantity-group">
+              <label>
+                Adet:
+                <div className="quantity-controls">
+                  <button 
+                    type="button" 
+                    onClick={decreaseQuantity}
+                    className="quantity-button"
+                    disabled={formData.quantity <= 1}
+                  >
+                    -
+                  </button>
+                  <span className="quantity-display">{formData.quantity}</span>
+                  <button 
+                    type="button" 
+                    onClick={increaseQuantity}
+                    className="quantity-button"
+                  >
+                    +
+                  </button>
+                </div>
+              </label>
+            </div>
+
+            <div className="order-summary">
+              <h3>Sipariş Özeti</h3>
+              <p>
+                <span className="label">Pizza Boyutu:</span>
+                <span>{formData.size || '-'}</span>
+              </p>
+              <p>
+                <span className="label">Hamur:</span>
+                <span>{formData.dough || '-'}</span>
+              </p>
+              <p>
+                <span className="label">Malzemeler:</span>
+                <div className="toppings-list">
+                  {formData.toppings.length > 0 ? (
+                    formData.toppings.map(topping => (
+                      <span key={topping} className="topping-tag">
+                        {topping}
+                      </span>
+                    ))
+                  ) : (
+                    '-'
+                  )}
+                </div>
+              </p>
+              {formData.note && (
+                <p>
+                  <span className="label">Sipariş Notu:</span>
+                  <span>{formData.note}</span>
+                </p>
+              )}
+              <p>
+                <span className="label">Adet:</span>
+                <span>{formData.quantity}</span>
+              </p>
+              <div className="price-section">
+                <p>
+                  <span className="label">Pizza Fiyatı:</span>
+                  <span>{calculateBasePrice()} TL</span>
+                </p>
+                <p>
+                  <span className="label">Malzeme Fiyatı:</span>
+                  <span>{calculateToppingsPrice()} TL</span>
+                </p>
+                <p>
+                  <span className="label">Toplam:</span>
+                  <span className="total-price">{calculateTotalPrice()} TL</span>
+                </p>
               </div>
-            </p>
-            {formData.note && (
-              <p>
-                <span className="label">Özel Not:</span>
-                <span>{formData.note}</span>
-              </p>
-            )}
-            <div className="price-section">
-              <p>
-                <span className="label">Pizza Fiyatı:</span>
-                <span>{calculateBasePrice()} TL</span>
-              </p>
-              <p>
-                <span className="label">Malzeme Fiyatı:</span>
-                <span>{calculateToppingsPrice()} TL</span>
-              </p>
-              <p>
-                <span className="label">Toplam:</span>
-                <span className="total-price">{calculateTotalPrice()} TL</span>
-              </p>
             </div>
           </div>
 
@@ -319,5 +389,7 @@ function OrderForm({ onOrderSubmit }) {
     </div>
   );
 }
+
+
 
 export default OrderForm;

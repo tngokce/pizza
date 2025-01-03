@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import OrderForm from "./pages/OrderForm";
 import Success from "./pages/Success";
 import "./App.css";
+import './index.css';
+import './styles/OrderForm.css';
 
 function App() {
   const [orderData, setOrderData] = useState(null);

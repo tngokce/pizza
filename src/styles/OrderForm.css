@@ -1,9 +1,41 @@
+:root {
+  --color-yellow: #ffc107;
+  --color-light-gray: #e0e0e0;
+  --color-dark-gray: #333333;
+  --color-background: #f5f5f5;
+}
+
+.site-header {
+  background-color: #CE2829;
+  padding: 1.5rem;
+  margin: -20px -20px 20px -20px;
+  color: white;
+}
+
+.header-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.header-content .subtitle {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
 .order-form {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: var(--color-background);
     border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   .order-form form {
     display: flex;
@@ -75,6 +107,9 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    margin-left: 0;
   }
   .checkbox-label input {
     position: absolute;
@@ -112,6 +147,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
+   
   }
   .order-summary {
     margin-top: 2rem;
@@ -136,4 +172,235 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+  /* Select elementi için stiller */
+  .form-group .custom-select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--color-light-gray);
+    border-radius: 4px;
+    font-family: 'Barlow', sans-serif;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+  }
+  .form-group .custom-select:focus {
+    border-color: var(--color-yellow);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.2);
+  }
+  .form-group .custom-select option {
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+  /* Select için hover efekti */
+  .form-group .custom-select:hover {
+    border-color: var(--color-yellow);
+  }
+  /* Boyut ve Hamur seçimi için container */
+  .size-dough-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  .size-group {
+    flex: 1;
+  }
+  .dough-group {
+    flex: 1;
+  }
+  /* Dikey radio butonlar için stil */
+  .radio-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    align-items: center;
+  }
+  .radio-group-vertical .radio-label {
+    margin: 0;
+  }
+  /* Select kutusunu radio buttonlarla hizalamak için */
+  .dough-group .custom-select {
+    margin-top: 0.5rem;
+  }
+  /* Adet kontrolü için stiller */
+  .quantity-group {
+    margin: 1rem 0;
+  }
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .quantity-button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 2px solid var(--color-yellow);
+    background-color: white;
+    color: var(--color-dark-gray);
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  .quantity-button:hover:not(:disabled) {
+    background-color: var(--color-yellow);
+    color: var(--color-dark-gray);
+  }
+  .quantity-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: var(--color-light-gray);
+  }
+  .quantity-display {
+    min-width: 40px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-dark-gray);
+  }
+  /* Adet ve özet bölümü için container */
+  .quantity-summary-container {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+  .quantity-group {
+    flex: 1;
+    max-width: 200px;
+    margin: 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .order-summary {
+    flex: 2;
+    margin-top: 0;
+  }
+  /* Mobil görünüm için medya sorgusu */
+  @media (max-width: 768px) {
+    .quantity-summary-container {
+      flex-direction: column;
+    }
+    .quantity-group {
+      max-width: 100%;
+    }
+    .order-summary {
+      width: 100%;
+    }
+  }
+  /* Form grupları ve özet bölümü için beyaz arka plan */
   
+  .form-group, .order-summary, .quantity-group {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
+  /* Sipariş notu için stiller */
+  .form-group label[for="note"] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-left: 0;
+  }
+  .form-group .custom-textarea {
+    width: 100%;
+    max-width: 500px; /* veya istediğiniz genişlik */
+    min-height: 100px;
+    margin: 0.5rem 0;
+    resize: vertical;
+  }
+  .form-group .char-count {
+    color: var(--color-dark-gray);
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+  /* Sipariş özeti içindeki not alanı için stil */
+  .order-summary p .label + span {
+    display: inline-block;
+    margin-left: 0.5rem;
+  }
+  /* Başlık stilleri */
+  .form-group > label,
+  .form-group > h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 12px;
+  }
+  /* Zorunlu alan yıldızı */
+  .form-group > label::before,
+  .form-group > h3::before {
+    content: '*';
+    color: #CE2829;
+    margin-right: 4px;
+    font-size: 1rem;
+    position: absolute;
+    left: 0px;
+    top: 0;
+  }
+  /* Zorunlu alan yıldızı kuralına istisna ekleyelim */
+  .form-group > label[for="note"]::before {
+    content: none; /* Sipariş notu için yıldızı kaldır */
+  }
+  /* Ek Malzemeler başlığı için özel stil */
+  .form-group > h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  /* Ek Malzemeler altındaki açıklama metni */
+  .form-group > h3 + div {
+    color: #666;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  /* Select placeholder rengi */
+  .custom-select option:first-child {
+    color: #666;
+  }
+  /* Radio button container stili */
+  .radio-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    align-items: center;
+  }
+  /* Radio label stili */
+  .radio-label {
+    position: relative;
+    padding-left: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 100px;
+    text-align: left;
+  }
+  /* Radio button yanındaki metin için stil */
+  .radio-label span:not(.custom-radio) {
+    margin-left: 10px;
+    font-size: 1rem;
+    display: inline-block;
+    text-align: left;
+  }
+ 
