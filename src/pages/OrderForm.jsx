@@ -7,12 +7,6 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const validateName = (name) => {
-  if (!name) return 'İsim alanı zorunludur';
-  if (name.length < 3) return 'İsim en az 3 karakter olmalıdır';
-  return '';
-};
-
 const validateSize = (size) => {
   if (!size) return 'Lütfen bir pizza boyutu seçin';
   return '';
@@ -27,7 +21,6 @@ const validateToppings = (toppings) => {
 function OrderForm({ onOrderSubmit }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
     size: "",
     toppings: [],
     note: "",
@@ -36,7 +29,6 @@ function OrderForm({ onOrderSubmit }) {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
-    name: "",
     toppings: '',
     size: ''
   });
@@ -82,33 +74,20 @@ function OrderForm({ onOrderSubmit }) {
     } else {
       setFormData({ ...formData, [name]: value });
     }
-
-    // İsim 
-    if (name === 'name') {
-      const error = validateName(value);
-      setErrors(prev => ({
-        ...prev,
-        name: error
-      }));
-    }
   };
 
-  // Form güncelle
   const validateForm = () => {
-    const nameError = validateName(formData.name);
     const sizeError = validateSize(formData.size);
     const toppingsError = validateToppings(formData.toppings);
 
     setErrors({
-      name: nameError,
       size: sizeError,
       toppings: toppingsError
     });
 
-    return !nameError && !sizeError && !toppingsError;
+    return !sizeError && !toppingsError;
   };
 
-  // handleSubmit  güncelle
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -122,10 +101,8 @@ function OrderForm({ onOrderSubmit }) {
     try {
       const response = await axios.post("https://reqres.in/api/pizza", formData);
       
-      // konsola yazdir
       console.log('API Yanıtı:', response.data);
       console.log('Sipariş Özeti:', {
-        isim: response.data.name,
         boyut: response.data.size,
         malzemeler: response.data.toppings,
         not: response.data.note
@@ -145,13 +122,10 @@ function OrderForm({ onOrderSubmit }) {
     }
   };
 
-  // Form kontrol
   const isFormValid = 
-    formData.name.length >= 3 && 
     formData.size && 
     formData.toppings.length >= 4 && 
     formData.toppings.length <= 10 &&
-    !errors.name &&
     !errors.toppings &&
     !errors.size;
 
@@ -199,25 +173,22 @@ function OrderForm({ onOrderSubmit }) {
 
       <div className="form-container">
         <h2>Pizza Siparişi</h2>
-        <form onSubmit={handleSubmit}>
-        <div className="form-group">
-            <label htmlFor="name">
-              İsim:
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                minLength={3}
-                required
-                className={errors.name ? 'error' : 'custom-input'}
-                placeholder="İsminizi giriniz (en az 3 karakter)"
-              />
-              {errors.name && <span className="error-message">{errors.name}</span>}
-            </label>
+        
+        <div className="pizza-description">
+          <h2 className="pizza-title">Position Absolute Acı Pizza</h2>
+          <div className="price-rating">
+            <span className="price">85.50₺</span>
+            <div className="rating">
+              <span className="rating-score">4.8</span>
+              <span className="rating-count">(200)</span>
+            </div>
           </div>
+          <p className="description">
+            Frontend Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre...
+          </p>
+        </div>
 
+        <form onSubmit={handleSubmit}>
           <div className="size-dough-container">
             <div className="form-group size-group">
               <label>

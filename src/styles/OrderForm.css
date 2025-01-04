@@ -403,4 +403,59 @@
     display: inline-block;
     text-align: left;
   }
+  /* Pizza açıklaması için stiller */
+  .pizza-description {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .price-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+  .rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .rating-score {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  .rating-count {
+    color: #666;
+    font-size: 1rem;
+  }
+  .description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #444;
+    margin: 0;
+  }
+  /* Pizza başlığı için stil */
+  .pizza-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+  }
+  /* Mevcut pizza açıklaması stillerini güncelle */
+  .pizza-description {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
  
