@@ -80,12 +80,7 @@ function Success({ orderData, apiResponse }) {
         </div>
       </div>
 
-      <div className="api-response">
-        <h3>API Yanıtı</h3>
-        <pre>
-          {JSON.stringify(apiResponse, null, 2)}
-        </pre>
-      </div>
+      
 
       <button onClick={() => navigate('/')} className="home-button">
         Ana Sayfaya Dön

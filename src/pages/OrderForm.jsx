@@ -130,14 +130,14 @@ function OrderForm({ onOrderSubmit }) {
     !errors.size;
 
   const calculateToppingsPrice = () => {
-    return formData.toppings.length * 5; // Her malzeme 5 TL
+    return formData.toppings.length * 5;
   };
 
   const calculateBasePrice = () => {
     switch(formData.size) {
-      case 'Küçük': return 50;
-      case 'Orta': return 75;
-      case 'Büyük': return 100;
+      case 'Küçük': return 85.50;
+      case 'Orta': return 140;
+      case 'Büyük': return 200;
       default: return 0;
     }
   };
